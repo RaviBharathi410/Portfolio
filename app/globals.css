@@ -22,7 +22,8 @@
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 47 93% 58%; /* Yellow accent matching the hero section */
+    --accent: 47 93% 58%;
+    /* Yellow accent matching the hero section */
     --accent-foreground: 240 5.9% 10%;
 
     --destructive: 0 84.2% 60.2%;
@@ -54,7 +55,7 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 47 93% 58%; 
+    --accent: 47 93% 58%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -81,6 +82,7 @@
 }
 
 @layer components {
+
   /* Glass Utilities */
   .glass {
     background: rgba(255, 255, 255, 0.1);
@@ -88,9 +90,16 @@
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
   }
+
+
   .dark .glass {
     background: rgba(24, 24, 27, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass:hover {
+    background-color: hsl(var(--primary) / 0.9);
+    transform: translateY(-3px);
   }
 
   .primary-btn {
@@ -99,6 +108,7 @@
     font-weight: 500;
     transition: all 0.3s;
   }
+
   .primary-btn:hover {
     background-color: hsl(var(--primary) / 0.9);
     transform: translateY(-1px);
@@ -112,6 +122,7 @@
     max-width: 1400px;
     margin: 0 auto;
   }
+
   .section-label {
     font-size: 0.7rem;
     letter-spacing: 0.3em;
@@ -122,6 +133,7 @@
     gap: 0.7rem;
     margin-bottom: 2rem;
   }
+
   .section-label::before {
     content: '';
     display: block;
@@ -129,6 +141,7 @@
     height: 1px;
     background: hsl(var(--accent));
   }
+
   .section-title {
     font-size: clamp(2.5rem, 6vw, 5rem);
     font-weight: 900;
@@ -141,17 +154,30 @@
 
 /* Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
+
 .float-anim {
   animation: float 5s ease-in-out infinite;
 }
 
 /* Marquee Animation */
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /* Reveal Transition */
@@ -160,6 +186,7 @@
   transform: translateY(20px);
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
+
 .reveal.active {
   opacity: 1;
   transform: translateY(0);

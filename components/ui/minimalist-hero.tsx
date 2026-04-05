@@ -1,4 +1,7 @@
-import React, { useRef } from 'react';
+"use client";
+
+import React, { useRef, useState } from 'react';
+
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -10,12 +13,12 @@ interface MinimalistHeroProps {
   mainText: string;
   readMoreLink: string;
   imageSrc: string;
+  imageHoverSrc?: string;
   imageAlt: string;
   overlayText: {
     part1: string;
     part2: string;
   };
-  socialLinks: { icon: LucideIcon; href: string }[];
   locationText: string;
   className?: string;
 }
@@ -24,18 +27,14 @@ interface MinimalistHeroProps {
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a
     href={href}
-    className="text-sm font-medium tracking-widest text-foreground/60 transition-colors hover:text-foreground"
+    className="text-sm font-medium tracking-widest text-white/60 transition-colors hover:text-white"
   >
     {children}
   </a>
 );
 
 // Helper component for social media icons
-const SocialIcon = ({ href, icon: Icon }: { href: string; icon: LucideIcon }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" className="text-foreground/60 transition-colors hover:text-foreground">
-    <Icon className="h-5 w-5" />
-  </a>
-);
+
 
 // The main reusable Hero Section component
 export const MinimalistHero = ({
@@ -44,21 +43,30 @@ export const MinimalistHero = ({
   mainText,
   readMoreLink,
   imageSrc,
+  imageHoverSrc,
   imageAlt,
   overlayText,
-  socialLinks,
   locationText,
   className,
 }: MinimalistHeroProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mouse, setMouse] = useState({ x: -300, y: -300 });
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!wrapperRef.current) return;
+    const rect = wrapperRef.current.getBoundingClientRect();
+    setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleMouseLeave = () => setMouse({ x: -300, y: -300 });
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
 
-  // Scroll animations: Zoom out effect (scale goes from 1.5 to 1)
-  const imageScale = useTransform(scrollYProgress, [0, 0.5], [1.5, 0.9]);
-  const circleScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+  // Scroll animations
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const yOffset = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
 
@@ -66,17 +74,17 @@ export const MinimalistHero = ({
     <div
       ref={containerRef}
       className={cn(
-        'relative flex h-screen w-full flex-col items-center justify-between overflow-hidden bg-background p-8 font-sans md:p-12',
+        'relative flex h-screen w-full flex-col items-start justify-between overflow-hidden bg-black text-white p-8 font-sans md:p-12',
         className
       )}
     >
       {/* Header */}
-      <header className="z-30 flex w-full max-w-7xl items-center justify-between">
+      <header className="z-30 flex w-full items-center justify-between">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-xl font-bold tracking-wider uppercase"
+          className="text-3xl md:text-4xl font-bold tracking-wider uppercase text-white"
         >
           {logoText}
         </motion.div>
@@ -94,63 +102,87 @@ export const MinimalistHero = ({
           className="flex flex-col space-y-1.5 md:hidden"
           aria-label="Open menu"
         >
-          <span className="block h-0.5 w-6 bg-foreground"></span>
-          <span className="block h-0.5 w-6 bg-foreground"></span>
-          <span className="block h-0.5 w-5 bg-foreground"></span>
+          <span className="block h-0.5 w-6 bg-white"></span>
+          <span className="block h-0.5 w-6 bg-white"></span>
+          <span className="block h-0.5 w-5 bg-white"></span>
         </motion.button>
       </header>
+      {/* Background Yellow Circle & Image Layers — scroll-synced with text */}
+      <motion.div
+        style={{ y: yOffset, opacity }}
+        className="absolute inset-0 flex justify-center items-end z-10"
+      >
+        <div
+          style={{ marginLeft: '-33px' }}
+          className="relative h-[350px] w-[350px] md:h-[500px] md:w-[500px] lg:h-[650px] lg:w-[650px]"
+        >
+          {/* Yellow circle */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            className="absolute inset-0 rounded-full bg-yellow-400/90"
+          />
+
+          {/* Portrait Image Layers — centered over circle using FM x for translate */}
+          <motion.div
+            ref={wrapperRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            initial={{ opacity: 0, y: 70, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+            className="absolute bottom-0 left-1/2 z-10 w-[500px] h-[90vh] md:w-[750px] md:h-[95vh] lg:w-[900px] lg:h-[100vh] cursor-crosshair transform-gpu pointer-events-auto"
+          >
+            {/* Layer 1 (bottom): Full color image — always visible underneath */}
+            <img
+              src="/photo-color.png"
+              alt="Ravibharathi V - Color"
+              className="absolute inset-0 w-full h-full object-contain object-bottom"
+            />
+
+            {/* Layer 2 (top): B&W image — mouse hover reveals color through radial hole */}
+            <img
+              src="/photo-bw.png"
+              alt="Ravibharathi V"
+              className="absolute inset-0 w-full h-full object-contain object-bottom transition-none"
+              style={{
+                maskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, transparent 0%, transparent 50%, black 80%)`,
+                WebkitMaskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, transparent 0%, transparent 50%, black 80%)`,
+              }}
+            />
+          </motion.div>
+        </div>
+      </motion.div>
 
       {/* Main Content Area */}
-      <motion.div 
+      <motion.div
         style={{ y: yOffset, opacity }}
-        className="relative grid w-full max-w-7xl flex-grow grid-cols-1 items-center md:grid-cols-3"
+        className="relative flex flex-col md:flex-row w-full flex-grow items-center justify-between z-20 pointer-events-none"
       >
         {/* Left Text Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="z-20 order-2 md:order-1 text-center md:text-left"
+          className="z-20 order-2 md:order-none text-left w-full md:w-1/3 mt-8 md:mt-0"
         >
-          <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
-          <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-foreground/80 transition-colors">
+          <p className="mx-auto max-w-xs text-sm leading-relaxed text-white/80 md:mx-0 pointer-events-auto">{mainText}</p>
+          <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-white underline underline-offset-4 decoration-1 hover:text-white/80 transition-colors pointer-events-auto">
             Read More
           </a>
         </motion.div>
 
-        {/* Center Image with Circle */}
-        <div className="relative order-1 md:order-2 flex justify-center items-center h-full">
-            <motion.div
-                style={{ scale: circleScale }}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-                className="absolute z-0 h-[300px] w-[300px] rounded-full bg-yellow-400 md:h-[400px] md:w-[400px] lg:h-[500px] lg:w-[500px]"
-            ></motion.div>
-            <motion.img
-                style={{ scale: imageScale }}
-                src={imageSrc}
-                alt={imageAlt}
-                className="relative z-10 h-auto w-56 object-contain md:w-64 lg:w-72"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.onerror = null;
-                target.src = `https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800&h=1200`;
-                }}
-            />
-        </div>
+
 
         {/* Right Text */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="z-20 order-3 flex items-center justify-center text-center md:justify-start"
+          className="z-20 order-3 md:order-none flex items-center justify-center md:justify-end w-full md:w-1/3"
         >
-          <h1 className="text-6xl font-extrabold text-foreground md:text-8xl lg:text-9xl leading-tight">
+          <h1 className="text-6xl font-extrabold text-white md:text-8xl lg:text-[10rem] leading-none text-center md:text-right pointer-events-auto">
             {overlayText.part1}
             <br />
             {overlayText.part2}
@@ -166,15 +198,13 @@ export const MinimalistHero = ({
           transition={{ duration: 0.5, delay: 0.8 }}
           className="flex items-center space-x-4"
         >
-          {socialLinks.map((link, index) => (
-            <SocialIcon key={index} href={link.href} icon={link.icon} />
-          ))}
+
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.9 }}
-          className="text-sm font-medium text-foreground/80 uppercase tracking-widest"
+          className="text-sm font-medium text-white/80 uppercase tracking-widest"
         >
           {locationText}
         </motion.div>

@@ -1,7 +1,7 @@
 "use client";
 
 const techTags = [
-  "React.js", "Next.js", "Node.js", "Express.js", "MongoDB", 
+  "React.js", "Next.js", "Node.js", "Express.js", "MongoDB",
   "Python", "Computer Vision", "OpenCV", "TensorFlow",
   "React Native", "Tailwind CSS", "GSAP", "Three.js",
   "IoT Systems", "Embedded C", "Docker", "AWS"
@@ -9,7 +9,7 @@ const techTags = [
 
 export default function Marquee() {
   return (
-    <div className="marquee-wrap relative z-10 border-y border-[var(--border)] py-5 overflow-hidden bg-[#09090b]/60">
+    <div className="marquee-wrap relative z-10 border-y border-[var(--border)] py-14 overflow-hidden bg-[#09090b]/60">
       <div className="marquee-track flex whitespace-nowrap animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused]">
         {/* Double the list for seamless loop */}
         {[...techTags, ...techTags].map((tag, i) => (

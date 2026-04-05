@@ -19,16 +19,16 @@ export default function Page() {
   return (
     <main className="min-h-screen bg-background relative selection:bg-accent selection:text-accent-foreground">
       {loading && <Loader onComplete={() => setLoading(false)} />}
-      
+
       {!loading && (
         <>
           <CustomCursor />
-          
+
           <div className="relative">
             <section id="home">
               <MinimalistHeroDemo />
             </section>
-            
+
             <div className="space-y-0 relative z-10">
               <Marquee />
               <div className="bg-background">
