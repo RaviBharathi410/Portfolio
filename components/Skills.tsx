@@ -58,7 +58,7 @@ const wordVariant = {
 const headingWords = "Building with a Modern Tech Stack.".split(" ");
 
 export default function Skills() {
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
@@ -117,7 +117,7 @@ export default function Skills() {
                     y: isActive ? -12 : 0,
                     scale: isActive ? 1.04 : (shouldDim ? 0.97 : 1),
                     opacity: shouldDim ? 0.55 : 1,
-                    backgroundColor: isActive ? "#0a0a0a" : "#e8e8e8",
+                    backgroundColor: isActive ? "#0a0a0a" : (idx === 0 ? "#0a0a0a" : "#e8e8e8"),
                     borderColor: isActive ? "#FFD700" : "transparent",
                     borderWidth: "1.5px",
                     borderStyle: "solid",
@@ -133,7 +133,7 @@ export default function Skills() {
                       ? {
                           y: -8,
                           scale: 1.02,
-                          backgroundColor: "#ffffff",
+                          backgroundColor: idx === 0 ? "#1a1a1a" : "#ffffff",
                           borderColor: "#FFD700",
                           boxShadow: "0 20px 50px rgba(0,0,0,0.1)",
                           transition: { type: "spring", stiffness: 300, damping: 22 },
@@ -174,7 +174,7 @@ export default function Skills() {
                       }
                     ></motion.div>
                     <h3
-                      className={`text-sm uppercase font-bold tracking-wider ${isActive ? "text-[#ffffff]" : "text-[#0a0a0a]"}`}
+                      className={`text-sm uppercase font-bold tracking-wider ${isActive || idx === 0 ? "text-[#ffffff]" : "text-[#0a0a0a]"}`}
                     >
                       {item.category}
                     </h3>
@@ -184,7 +184,7 @@ export default function Skills() {
                       <span
                         key={i}
                         className={`block w-full border-b pb-2 last:border-0 last:pb-0 font-medium ${
-                          isActive
+                          isActive || idx === 0
                             ? "text-[#aaaaaa] border-[#333333]"
                             : "text-[#3a3a3a] border-[#d1d1d1]/50"
                         }`}
