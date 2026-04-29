@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     id: "01",
-    title: "NIRAIVIZHI — HydroBot",
+    title: "NIRAIVIZHI",
     description: "AI-powered autonomous water monitoring system using ESP32 sensors (pH, turbidity, TDS, temperature) with ML-based anomaly detection and React Native authority dashboards.",
     tags: ["React Native", "ESP32", "ML", "IoT"],
     icon: Droplets,
@@ -20,7 +20,7 @@ const projects = [
   },
   {
     id: "02",
-    title: "Code Arena — AI Coding Battles",
+    title: "CODE ARENA",
     description: "Real-time multiplayer coding arena with voice-to-code via Web Speech API, ELO ranking, AI matchmaking system, and OpenCV handwriting recognition for multi-input interaction.",
     tags: ["Node.js", "OpenCV", "ELO", "Real-Time"],
     icon: Terminal,
@@ -38,7 +38,7 @@ const projects = [
   },
   {
     id: "04",
-    title: "DriveOS — V2X Swarm Intelligence",
+    title: "DriveOS",
     description: "Real-time V2X system using YOLOv8 and sensor fusion to detect road hazards. Firebase data mesh with CarPlay React dashboard and AES-256 end-to-end encryption.",
     tags: ["YOLOv8", "Flutter", "Firebase", "AES-256"],
     icon: Cpu,
