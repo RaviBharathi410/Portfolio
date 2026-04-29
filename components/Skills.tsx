@@ -1,59 +1,50 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const skillCategories = [
+const techCategories = [
   {
-    num: "01",
-    title: "Software Engineering",
-    tags: ["React.js", "Next.js", "Node.js", "TypeScript", "Express.js", "MERN Stack", "Firebase", "Redux"]
+    category: "Frontend",
+    tags: ["React.js", "React Native", "Tailwind CSS"],
   },
   {
-    num: "02",
-    title: "AI & Data Science",
-    tags: ["Python", "Computer Vision", "Deep Learning", "TensorFlow", "PyTorch", "Pandas", "Scikit-Learn"]
+    category: "Backend",
+    tags: ["Node.js", "Express.js", "Flask", "REST APIs"],
   },
   {
-    num: "03",
-    title: "Systems & DevOps",
-    tags: ["IoT Gateway", "Embedded Systems", "Docker", "AWS", "GitHub Actions", "Arduino", "Node-RED"]
+    category: "AI/ML",
+    tags: ["YOLOv8", "OpenCV", "Computer Vision", "TensorFlow"],
   },
   {
-    num: "04",
-    title: "Databases",
-    tags: ["MongoDB", "PostgreSQL", "Redis", "MySQL", "Prisma"]
+    category: "Databases",
+    tags: ["MongoDB", "PostgreSQL", "MySQL", "Firebase"],
   },
   {
-    num: "05",
-    title: "Design & UI/UX",
-    tags: ["Figma", "Tailwind CSS", "Framer Motion", "GSAP", "Three.js", "RIVE"]
+    category: "Languages",
+    tags: ["Python", "JavaScript", "Java", "SQL"],
   },
-  {
-    num: "06",
-    title: "Testing & Tools",
-    tags: ["Jest", "Postman", "Git", "Linux", "NPM/BUN", "Cypress"]
-  }
 ];
 
 export default function Skills() {
   const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".reveal-skill", {
+      gsap.from(".tech-item", {
         opacity: 0,
-        y: 40,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power3.out",
+        y: 30,
+        stagger: 0.04,
+        duration: 0.5,
+        ease: "power2.out",
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: ".tech-grid",
           start: "top 80%",
-          once: true,
         },
       });
     }, sectionRef);
@@ -62,42 +53,53 @@ export default function Skills() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="skills" className="section">
-      <div className="section-label reveal-skill">Core Tech</div>
-      <h2 className="section-title reveal-skill">
-        Building with a <br />
-        <strong className="gradient-text">Modern Tech Stack.</strong>
-      </h2>
+    <section ref={sectionRef} id="skills" className="section-full bg-[#f5f5f5] text-[#0a0a0a] py-32">
+      <div className="section-inner px-6 flex flex-col items-start max-w-7xl mx-auto">
+        <motion.div
+          initial={{ x: -30, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="section-label mb-6 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+        >
+          — Core Tech
+        </motion.div>
 
-      <div className="skills-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border border-[var(--border)] rounded-2xl overflow-hidden mt-12 bg-[#09090b]">
-        {skillCategories.map((category, idx) => (
-          <div 
-            key={idx} 
-            className="skill-card group reveal-skill relative p-8 bg-[var(--bg-card)] border-r border-b border-[var(--border)] last:border-r-0 hover:bg-[var(--bg-card-hover)] transition-all duration-300"
-          >
-            {/* Top Shine Effect */}
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[rgba(139,92,246,0.6)] to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-            
-            <div className="skill-num font-body text-[0.6rem] tracking-[0.2em] text-[rgba(167,139,250,0.6)] mb-5">
-              / {category.num}
-            </div>
-            
-            <div className="skill-cat font-display text-[0.95rem] font-semibold text-[var(--fg)] mb-4">
-              {category.title}
-            </div>
+        <motion.h2
+          initial={{ scale: 0.9, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="section-title text-4xl md:text-5xl font-display font-bold mb-12 text-[#0a0a0a]"
+        >
+          Building with a Modern Tech Stack.
+        </motion.h2>
 
-            <div className="skill-tags flex flex-wrap gap-1.5">
-              {category.tags.map((tag, i) => (
-                <span 
-                  key={i} 
-                  className="skill-badge px-2.5 py-1 rounded-md text-[0.62rem] font-body text-[var(--fg-muted)] bg-[rgba(255,255,255,0.04)] border border-[var(--border)] hover:text-[var(--fg)] hover:border-[rgba(167,139,250,0.3)] transition-all duration-300"
-                >
-                  {tag}
-                </span>
-              ))}
+        <div ref={gridRef} className="tech-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 w-full pt-8">
+          {techCategories.map((item, idx) => (
+            <div key={idx} className="tech-item">
+              <motion.div
+                whileHover={{ y: -4, border: "1px solid #FFD700" }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="h-full bg-[#e8e8e8] p-6 rounded-2xl border border-[#d1d1d1] flex flex-col items-center text-center shadow-sm"
+              >
+                <div className="flex flex-row items-center justify-start gap-3 mb-6 w-full">
+                  <div className="w-2 h-2 rounded-full bg-[#FFD700]"></div>
+                  <h3 className="text-[#0a0a0a] font-bold text-sm uppercase tracking-wider">
+                    {item.category}
+                  </h3>
+                </div>
+                <div className="flex flex-col gap-2 text-[#3a3a3a] font-medium text-sm leading-relaxed w-full items-center">
+                  {item.tags.map((tag, i) => (
+                    <span key={i} className="block w-full border-b border-[#d1d1d1]/50 pb-2 last:border-0 last:pb-0">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

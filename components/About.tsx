@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
@@ -8,56 +9,122 @@ gsap.registerPlugin(ScrollTrigger);
 
 const skillChips = [
   "MERN Stack", "React Native", "Computer Vision",
-  "IoT / ESP32", "Real-Time Systems", "AI / ML",
+  "Real-Time Systems", "AI / ML",
   "REST APIs", "Flask"
 ];
 
+const headingWords = "Engineering the future, one stack at a time.".split(" ");
+
 export default function About() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".reveal-about", {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
-      });
-    }, sectionRef);
+      gsap.fromTo(
+        ".split-word",
+        { y: "110%" },
+        {
+          y: "0%",
+          stagger: 0.035,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: "top 80%",
+          },
+        }
+      );
+    }, headingRef);
 
     return () => ctx.revert();
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.4,
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const pillVariants = {
+    hidden: { opacity: 0, scale: 0.7 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      },
+    },
+  };
+
   return (
-    <section id="about" ref={sectionRef} className="section-full bg-black/20">
-      <div className="section-inner px-6 py-40 flex flex-col items-start max-w-7xl text-left">
+    <section id="about" className="section-full bg-[#e8e8e8] text-[#0a0a0a]">
+      <div className="section-inner px-6 py-40 flex flex-col items-start max-w-7xl mx-auto text-left">
         <div className="w-full flex flex-col items-start justify-start">
-          <div className="section-label mb-6">About Me</div>
-          <h2 className="section-title text-4xl md:text-5xl font-display font-light mb-8 reveal-about">
-            Engineering the future, <strong>one stack at a time.</strong>
-          </h2>
+          <motion.div
+            initial={{ x: -40, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="section-label mb-6 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+          >
+            — About Me
+          </motion.div>
 
-          <div className="about-body reveal-about space-y-6 text-[var(--fg-muted)] text-lg leading-relaxed font-light mb-10 max-w-3xl">
-            <p>
-              I am a Computer Science Engineering student at PSNA College of Engineering and Technology, Dindigul — graduating in 2027. I specialize in full-stack development with a sharp focus on AI-driven applications and real-time systems.
-            </p>
-            <p>
-              From autonomous water monitoring bots to real-time AI coding arenas — I build end-to-end systems that solve real problems at the intersection of hardware, software, and intelligence.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap justify-start gap-3 reveal-about">
-            {skillChips.map(chip => (
-              <span key={chip} className="chip glass px-4 py-2 rounded-full text-sm font-body tracking-wide border border-[var(--border-light)] hover:bg-yellow-400 hover:text-black hover:border-yellow-400 hover:scale-105 transition-all duration-300 cursor-default shadow-sm">
-                {chip}
+          <h2
+            ref={headingRef}
+            className="section-title text-4xl md:text-5xl font-display font-bold mb-8 flex flex-wrap gap-x-3 gap-y-2 text-[#0a0a0a]"
+          >
+            {headingWords.map((word, idx) => (
+              <span key={idx} className="overflow-hidden inline-block pb-1">
+                <span className="split-word inline-block">{word}</span>
               </span>
             ))}
+          </h2>
+
+          <div className="about-body space-y-6 text-[#3a3a3a] text-lg leading-relaxed font-light mb-10 max-w-3xl">
+            <motion.p
+              initial={{ y: 25, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              I am a Computer Science Engineering student at PSNA College of Engineering and Technology, Dindigul — graduating in 2027. I specialize in full-stack development with a sharp focus on AI-driven applications and real-time systems.
+            </motion.p>
+            <motion.p
+              initial={{ y: 25, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+            >
+              From autonomous water monitoring bots to real-time AI coding arenas — I build end-to-end systems that solve real problems at the intersection of software and intelligence.
+            </motion.p>
           </div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="flex flex-wrap justify-start gap-3"
+          >
+            {skillChips.map((chip) => (
+              <motion.span
+                key={chip}
+                variants={pillVariants}
+                whileHover={{ scale: 1.05, borderColor: "#FFD700" }}
+                className="px-4 py-2 rounded-full text-sm font-medium tracking-wide border border-[#0a0a0a]/20 bg-[#f5f5f5] text-[#0a0a0a] shadow-sm cursor-default"
+              >
+                {chip}
+              </motion.span>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>

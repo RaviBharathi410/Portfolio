@@ -1,78 +1,74 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from "framer-motion";
 
 const certifications = [
   {
-    name: "Python for Beginners",
-    issuer: "Microsoft Learn",
-    date: "Mar 2026",
-    icon: "🐍",
+    title: "Introduction to Generative AI",
+    issuer: "Google Cloud",
+    date: "March 2026",
+    link: "#",
   },
   {
-    name: "IBM Skills Network / Cognitive Class",
-    issuer: "IBM",
-    date: "Oct 2025",
-    icon: "🧠",
+    title: "AWS Gen AI Foundation Course",
+    issuer: "AWS Academy",
+    date: "April 2026",
+    link: "#",
   },
   {
-    name: "MongoDB University — 8+ Badges",
-    issuer: "MongoDB University",
-    date: "Jul 2025",
-    icon: "🍃",
+    title: "MongoDB University",
+    issuer: "8+ Badges Completed",
+    date: "July 2025",
+    link: "#",
   },
 ];
 
 export default function Certifications() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".cert-row", {
-        opacity: 0,
-        x: -20,
-        duration: 0.6,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="certs" ref={sectionRef} className="section-full">
-      <div className="section-inner px-6 py-24">
-        <div className="section-label">Certifications</div>
-        <h2 className="section-title text-4xl font-display font-light mb-12 reveal">
-          What I&apos;ve <strong>Earned.</strong>
-        </h2>
+    <section id="certifications" className="section-full bg-[#e8e8e8] text-[#0a0a0a] py-32">
+      <div className="section-inner px-6 max-w-7xl mx-auto flex flex-col items-start w-full">
+        <motion.div
+          initial={{ x: -30, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="section-label mb-12 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+        >
+          — Certifications
+        </motion.div>
 
-        <div className="flex flex-col gap-4">
-          {certifications.map((cert, i) => (
-            <div 
-              key={i} 
-              className="cert-row glass p-6 md:p-8 rounded-2xl border border-[var(--border-light)] flex items-center gap-6 hover:bg-white/5 transition-all group"
+        <div className="w-full flex flex-col gap-4">
+          {certifications.map((cert, idx) => (
+            <motion.a
+              href={cert.link}
+              key={idx}
+              initial={{ x: -60, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: idx * 0.1 }}
+              whileHover={{
+                x: 4,
+                borderLeft: "3px solid #FFD700",
+                transition: { type: "spring", stiffness: 300, damping: 20 },
+              }}
+              className="group flex flex-col sm:flex-row items-start sm:items-center justify-between w-full p-6 bg-[#f5f5f5] rounded-xl border-l-4 border-transparent hover:bg-[#fafafa] transition-colors cursor-pointer"
             >
-              <div className="text-3xl grayscale group-hover:grayscale-0 transition-all duration-500">
-                {cert.icon}
+              <div className="flex items-center gap-4 mb-4 sm:mb-0">
+                <span className="text-[#FFD700] text-lg">✦</span>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                  <h3 className="font-bold text-[#0a0a0a] text-lg">{cert.title}</h3>
+                  <span className="hidden sm:inline text-gray-300">|</span>
+                  <div className="flex gap-2 text-sm">
+                    <span className="text-[#FFD700] font-semibold">{cert.issuer}</span>
+                    <span className="text-[#999999]">· {cert.date}</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-display font-medium text-[var(--fg)]">{cert.name}</h3>
-                <div className="text-[var(--fg-muted)] text-sm mt-1">{cert.issuer}</div>
-              </div>
-              <div className="text-sm font-body text-[var(--fg-muted)] opacity-60">
-                {cert.date}
-              </div>
-            </div>
+              
+              <span className="text-[10px] font-bold tracking-[0.2em] text-[#0a0a0a]/50 uppercase group-hover:text-[#FFD700] transition-colors mt-2 sm:mt-0 sm:ml-4">
+                View →
+              </span>
+            </motion.a>
           ))}
         </div>
       </div>

@@ -1,61 +1,101 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { Trophy } from "lucide-react";
 
 const achievements = [
   {
-    medal: "#1",
-    title: "Winner — E-Horyzon 2026",
-    venue: "Idea Pitching Competition · Kongu Engineering College",
+    title: "Winner — SaaSathoN'26",
+    event: "36-hour SaaS Hackathon",
+    venue: "SSN College of Engineering",
   },
   {
-    medal: "#3",
-    title: "2nd Runner-Up — HeisenHack 2025",
-    venue: "24-Hour National Hackathon · SRM Institute of Science & Technology",
+    title: "Winner — E-Horyzon 2026",
+    event: "Idea Pitching Competition",
+    venue: "Kongu Engineering College",
+  },
+  {
+    title: "Winner — AURISTRA'26",
+    event: "48-hour Hackathon",
+    venue: "Takshashila University",
   },
 ];
 
+const cardVariants = {
+  hidden: { y: 50, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 20,
+    },
+  },
+};
+
 export default function Achievements() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".ach-card", {
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const smoothY = useSpring(y, { stiffness: 80, damping: 20 });
 
   return (
-    <section id="achievements" ref={sectionRef} className="py-24 px-6 max-w-6xl mx-auto">
-      <div className="section-label">Recognition</div>
-      <h2 className="section-title text-4xl font-display font-light mb-12 reveal">
-        Awards &amp; <strong>Achievements.</strong>
-      </h2>
+    <section ref={sectionRef} id="recognition" className="section-full bg-[#f5f5f5] text-[#0a0a0a] py-32 relative overflow-hidden">
+      
+      {/* Parallax Background Text */}
+      <motion.div
+        style={{ y: smoothY, willChange: "transform" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] md:text-[20rem] font-bold text-[#f0f0f0] pointer-events-none z-0 select-none whitespace-nowrap"
+      >
+        WINS
+      </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {achievements.map((ach, i) => (
-          <div key={i} className="ach-card glass p-10 rounded-[32px] border border-[var(--border-light)] hover:border-[var(--primary)]/30 transition-all duration-500 group relative">
-            <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-[var(--primary)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="text-5xl font-display font-light gradient-text mb-6">{ach.medal}</div>
-            <h3 className="text-2xl font-display font-medium mb-3">{ach.title}</h3>
-            <p className="text-[var(--fg-muted)] font-body tracking-wide">{ach.venue}</p>
-          </div>
-        ))}
+      <div className="section-inner px-6 max-w-7xl mx-auto flex flex-col items-start relative z-10">
+        <motion.div
+          initial={{ x: -30, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="section-label mb-16 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+        >
+          — Recognition
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ staggerChildren: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"
+        >
+          {achievements.map((item, idx) => (
+            <motion.div
+              key={idx}
+              variants={cardVariants}
+              whileHover={{
+                y: -6,
+                scale: 1.02,
+                borderColor: "#FFD700",
+                transition: { type: "spring", stiffness: 300, damping: 20 },
+              }}
+              className="bg-[#ffffff] rounded-2xl p-8 border border-[#e0e0e0] flex flex-col items-center text-center shadow-sm"
+            >
+              <div className="mb-6 p-4 rounded-full bg-[#f5f5f5] text-[#0a0a0a]">
+                <Trophy size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-[#0a0a0a] mb-2">{item.title}</h3>
+              <p className="font-bold text-[#FFD700] text-sm uppercase tracking-wide mb-3">{item.event}</p>
+              <p className="text-[#666666] text-sm">{item.venue}</p>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

@@ -1,68 +1,129 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { motion } from "framer-motion";
 import { Mail, Phone, Linkedin, Github } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
+const buttonContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const buttonVariants = {
+  hidden: { scale: 0.85, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 20,
+    },
+  },
+};
 
 export default function Contact() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".reveal-contact", {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="contact" ref={sectionRef} className="relative py-32 overflow-hidden px-6">
-      <div className="contact-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--primary)]/10 blur-[120px] rounded-full pointer-events-none" />
+    <section id="contact" className="section-full bg-[#ffffff] text-[#0a0a0a] py-32">
+      <div className="section-inner px-6 max-w-4xl mx-auto flex flex-col items-center text-center">
+        <motion.div
+          initial={{ x: -30, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="section-label mb-12 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold self-start sm:self-center"
+        >
+          — Let's Talk
+        </motion.div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <div className="section-label mx-auto mb-8">Let&apos;s Talk</div>
-
-        <h2 className="text-4xl md:text-6xl font-display font-light mb-8 reveal-contact leading-[1.1]">
-          Ready to build <br />
-          <strong className="gradient-text font-semibold tracking-tight">something remarkable?</strong>
+        <h2 className="text-5xl md:text-7xl font-display font-bold mb-8 leading-[1.1] text-[#0a0a0a]">
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7 }}
+          >
+            Ready to build
+          </motion.div>
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-[#FFD700]"
+          >
+            something remarkable?
+          </motion.div>
         </h2>
 
-        <p className="text-[var(--fg-muted)] text-lg md:text-xl font-light mb-16 max-w-2xl mx-auto reveal-contact">
-          Whether it&apos;s a full-stack platform, AI system, or IoT solution — I&apos;m always open to exciting collaborations and new opportunities.
-        </p>
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-[#666666] text-lg md:text-xl font-light mb-16 max-w-2xl"
+        >
+          Whether it's a full-stack platform, AI system, or IoT solution — I'm always open to exciting collaborations and new opportunities.
+        </motion.p>
 
-        <div className="flex flex-wrap justify-center gap-4 reveal-contact">
-          <a href="mailto:ravibharathiv410@gmail.com" className="glass px-8 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/5 transition-all">
-            <Phone size={20} />
+        <motion.div
+          variants={buttonContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="flex flex-wrap justify-center gap-4"
+        >
+          <motion.a
+            variants={buttonVariants}
+            whileHover={{ scale: 1.04, borderColor: "#FFD700" }}
+            whileTap={{ scale: 0.96 }}
+            href="mailto:ravibharathiv410@gmail.com"
+            className="px-8 py-4 rounded-2xl flex items-center gap-3 border border-[#e0e0e0] bg-[#f5f5f5] text-[#0a0a0a] font-medium transition-colors"
+          >
             <Mail size={20} />
-            <span>Send Email </span>
-          </a>
-          <a href="tel:+917550068435" className="glass px-8 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/5 transition-all">
+            <span>Send Email</span>
+          </motion.a>
+          
+          <motion.a
+            variants={buttonVariants}
+            whileHover={{ scale: 1.04, borderColor: "#FFD700" }}
+            whileTap={{ scale: 0.96 }}
+            href="tel:+917550068435"
+            className="px-8 py-4 rounded-2xl flex items-center gap-3 border border-[#e0e0e0] bg-[#f5f5f5] text-[#0a0a0a] font-medium transition-colors"
+          >
             <Phone size={20} />
             <span>+91 755 006 8435</span>
-          </a>
+          </motion.a>
+          
           <div className="flex gap-4 w-full justify-center md:w-auto">
-            <a href="https://www.linkedin.com/in/ravibharathi-v/" target="_blank" rel="noopener noreferrer" className="glass w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-white/5 transition-all">
+            <motion.a
+              variants={buttonVariants}
+              whileHover={{ scale: 1.1, color: "#FFD700", borderColor: "#FFD700" }}
+              whileTap={{ scale: 0.96 }}
+              href="https://www.linkedin.com/in/ravibharathi-v/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-14 h-14 rounded-2xl flex items-center justify-center border border-[#e0e0e0] bg-[#f5f5f5] text-[#0a0a0a] transition-colors"
+            >
               <Linkedin size={22} />
-            </a>
-            <a href="https://github.com/RaviBharathi410" target="_blank" rel="noopener noreferrer" className="glass w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-white/5 transition-all">
+            </motion.a>
+            
+            <motion.a
+              variants={buttonVariants}
+              whileHover={{ scale: 1.1, color: "#FFD700", borderColor: "#FFD700" }}
+              whileTap={{ scale: 0.96 }}
+              href="https://github.com/RaviBharathi410"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-14 h-14 rounded-2xl flex items-center justify-center border border-[#e0e0e0] bg-[#f5f5f5] text-[#0a0a0a] transition-colors"
+            >
               <Github size={22} />
-            </a>
+            </motion.a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

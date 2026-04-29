@@ -126,31 +126,37 @@ export const MinimalistHero = ({
 
           {/* Portrait Image Layers — centered over circle using FM x for translate */}
           <motion.div
-            ref={wrapperRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
             initial={{ opacity: 0, y: 70, x: "-50%" }}
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-            className="absolute bottom-0 left-1/2 z-10 w-[500px] h-[90vh] md:w-[750px] md:h-[95vh] lg:w-[900px] lg:h-[100vh] cursor-crosshair transform-gpu pointer-events-auto"
+            className="absolute bottom-0 left-1/2 z-10 w-[500px] h-[90vh] md:w-[750px] md:h-[95vh] lg:w-[900px] lg:h-[100vh] pointer-events-auto"
           >
-            {/* Layer 1 (bottom): Full color image — always visible underneath */}
-            <img
-              src="/photo-color.png"
-              alt="Ravibharathi V - Color"
-              className="absolute inset-0 w-full h-full object-contain object-bottom"
-            />
+            <motion.div
+              ref={wrapperRef}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="w-full h-full cursor-crosshair transform-gpu origin-bottom"
+            >
+              {/* Layer 1 (bottom): Full color image — always visible underneath */}
+              <img
+                src="/photo-color.png"
+                alt="Ravibharathi V - Color"
+                className="absolute inset-0 w-full h-full object-contain object-bottom"
+              />
 
-            {/* Layer 2 (top): B&W image — mouse hover reveals color through radial hole */}
-            <img
-              src="/photo-bw.png"
-              alt="Ravibharathi V"
-              className="absolute inset-0 w-full h-full object-contain object-bottom transition-none"
-              style={{
-                maskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, transparent 0%, transparent 50%, black 80%)`,
-                WebkitMaskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, transparent 0%, transparent 50%, black 80%)`,
-              }}
-            />
+              {/* Layer 2 (top): B&W image — mouse hover reveals color through radial hole */}
+              <img
+                src="/photo-bw.png"
+                alt="Ravibharathi V"
+                className="absolute inset-0 w-full h-full object-contain object-bottom transition-none"
+                style={{
+                  maskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, transparent 0%, transparent 50%, black 80%)`,
+                  WebkitMaskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, transparent 0%, transparent 50%, black 80%)`,
+                }}
+              />
+            </motion.div>
           </motion.div>
         </div>
       </motion.div>

@@ -29,21 +29,15 @@ export default function Page() {
               <MinimalistHeroDemo />
             </section>
 
-            <div className="space-y-0 relative z-10">
+            <div className="relative z-10 flex flex-col">
+              <About />
               <Marquee />
-              <div className="bg-background">
-                <About />
-                <div className="bg-secondary/50">
-                  <Skills />
-                </div>
-                <Projects />
-                <div className="bg-secondary/50">
-                  <Achievements />
-                </div>
-                <Certifications />
-                <Contact />
-                <Footer />
-              </div>
+              <Skills />
+              <Projects />
+              <Achievements />
+              <Certifications />
+              <Contact />
+              <Footer />
             </div>
           </div>
         </>

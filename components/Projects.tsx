@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Droplets, Terminal, ShieldCheck, Cpu } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,122 +14,178 @@ const projects = [
     title: "NIRAIVIZHI — HydroBot",
     description: "AI-powered autonomous water monitoring system using ESP32 sensors (pH, turbidity, TDS, temperature) with ML-based anomaly detection and React Native authority dashboards.",
     tags: ["React Native", "ESP32", "ML", "IoT"],
-    emoji: "🌊",
-    github: "#",
+    icon: Droplets,
+    github: "https://github.com/RaviBharathi410/NIRAIVIZHI-Hydrobot",
     link: "#",
-    gradient: "linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1), rgba(52, 211, 153, 0.08))"
   },
   {
     id: "02",
     title: "Code Arena — AI Coding Battles",
     description: "Real-time multiplayer coding arena with voice-to-code via Web Speech API, ELO ranking, AI matchmaking system, and OpenCV handwriting recognition for multi-input interaction.",
     tags: ["Node.js", "OpenCV", "ELO", "Real-Time"],
-    emoji: "⚔️",
-    github: "#",
+    icon: Terminal,
+    github: "https://github.com/RaviBharathi410/Code-Arena",
     link: "#",
-    gradient: "linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1), rgba(52, 211, 153, 0.08))"
   },
   {
     id: "03",
-    title: "Face Recognition Security",
-    description: "Biometric authentication system combining facial recognition with traditional login. Real-time face detection, verification, and database-driven user access control.",
-    tags: ["OpenCV", "Flask", "Python", "PostgreSQL"],
-    emoji: "🔐",
-    github: "#",
+    title: "SCRIBE",
+    description: "AI-powered real-time transcription and smart note-generation system that converts speech into structured summaries using NLP. Supports voice input, keyword extraction, speaker identification, and auto-generated action items for easy access and collaboration.",
+    tags: ["React", "Node.js", "NLP", "Real-Time"],
+    icon: ShieldCheck,
+    github: "https://github.com/RaviBharathi410/Scribe",
     link: "#",
-    gradient: "linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.08))"
+  },
+  {
+    id: "04",
+    title: "DriveOS — V2X Swarm Intelligence",
+    description: "Real-time V2X system using YOLOv8 and sensor fusion to detect road hazards. Firebase data mesh with CarPlay React dashboard and AES-256 end-to-end encryption.",
+    tags: ["YOLOv8", "Flutter", "Firebase", "AES-256"],
+    icon: Cpu,
+    github: "https://github.com/RaviBharathi410/Drive-OS",
+    link: "#",
   },
 ];
 
+const headingWords = "Things I've Built.".split(" ");
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { y: 60, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 20,
+    },
+  },
+};
+
 export default function Projects() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".project-card", {
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-    }, sectionRef);
+      gsap.fromTo(
+        ".project-split-word",
+        { y: "110%" },
+        {
+          y: "0%",
+          stagger: 0.035,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: "top 80%",
+          },
+        }
+      );
+    }, headingRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="section-full">
-      <div className="section-inner px-6 py-24">
-        <div className="section-label">Featured Work</div>
-        <h2 className="section-title text-4xl md:text-5xl font-display font-light mb-16 reveal">
-          Things I&apos;ve <strong>Built.</strong>
+    <section id="projects" className="section-full bg-[#ffffff] text-[#0a0a0a] py-32">
+      <div className="section-inner px-6 max-w-7xl mx-auto flex flex-col items-start">
+        <motion.div
+          initial={{ x: -30, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="section-label mb-6 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+        >
+          — Featured Work
+        </motion.div>
+
+        <h2
+          ref={headingRef}
+          className="section-title text-4xl md:text-5xl font-display font-bold mb-16 flex flex-wrap gap-x-3 gap-y-2 text-[#0a0a0a]"
+        >
+          {headingWords.map((word, idx) => (
+            <span key={idx} className="overflow-hidden inline-block pb-1">
+              <span className="project-split-word inline-block">{word}</span>
+            </span>
+          ))}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8 w-full"
+        >
           {projects.map((project) => (
-            <div key={project.id} className="project-card group perspective-1000">
-              <div className="relative w-full h-[450px] transition-transform duration-700 transform-style-3d group-hover:rotate-y-180">
-                
-                {/* Front Side */}
-                <div className="absolute inset-0 backface-hidden rounded-[32px] overflow-hidden glass border border-[var(--border-light)] p-8 flex flex-col">
-                  <div className="h-48 w-full rounded-2xl relative overflow-hidden flex items-center justify-center mb-8">
-                    <div 
-                      className="absolute inset-0 opacity-40 group-hover:scale-110 transition-transform duration-700" 
-                      style={{ background: project.gradient }}
-                    />
-                    <span className="text-6xl z-10 relative">{project.emoji}</span>
-                  </div>
-                  
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-display font-medium mb-4">{project.title}</h3>
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="skill-badge text-[10px] px-2 py-1 uppercase tracking-wider">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="text-[var(--fg-muted)] text-sm font-body uppercase tracking-[0.2em]">
-                    Hover to flip →
-                  </div>
+            <motion.div
+              key={project.id}
+              variants={cardVariants}
+              whileHover={{
+                y: -10,
+                boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+                transition: { type: "spring", stiffness: 300, damping: 20 },
+              }}
+              className="bg-[#f5f5f5] rounded-[24px] p-8 md:p-10 flex flex-col justify-between border border-[#e8e8e8]"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-8">
+                  <span className="text-[#0a0a0a] p-3 rounded-full bg-[#e8e8e8]">
+                    <project.icon size={32} strokeWidth={1.5} />
+                  </span>
+                  <span className="text-xs font-bold tracking-[0.2em] text-[#FFD700] uppercase">
+                    Project {project.id}
+                  </span>
                 </div>
 
-                {/* Back Side */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-[32px] overflow-hidden glass border border-[var(--border-light)] p-8 flex flex-col justify-between bg-black/40">
-                  <div>
-                    <div className="text-xs font-body tracking-[0.3em] text-[var(--primary)] uppercase mb-4">Project {project.id}</div>
-                    <h3 className="text-2xl font-display font-semibold mb-6 gradient-text">{project.title}</h3>
-                    <p className="text-[var(--fg-muted)] leading-relaxed font-light mb-8">
-                      {project.description}
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center gap-4">
-                    <a 
-                      href={project.github} 
-                      className="flex-1 glass py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
+                <h3 className="text-2xl font-bold mb-4 text-[#0a0a0a]">{project.title}</h3>
+                <p className="text-[#3a3a3a] leading-relaxed font-light mb-8">
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[11px] px-3 py-1 uppercase tracking-wider font-semibold border border-[#0a0a0a]/20 rounded-full text-[#0a0a0a]"
                     >
-                      <Github size={18} />
-                      <span className="text-sm font-medium">GitHub</span>
-                    </a>
-                    <a 
-                      href={project.link} 
-                      className="w-12 h-12 glass rounded-xl flex items-center justify-center hover:bg-white/5 transition-colors"
-                    >
-                      <ExternalLink size={18} />
-                    </a>
-                  </div>
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
-            </div>
+
+              <div className="flex items-center gap-4">
+                <motion.a
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  href={project.github}
+                  className="flex-1 bg-[#0a0a0a] text-[#ffffff] py-3 rounded-xl flex items-center justify-center gap-2 transition-colors hover:bg-[#1a1a1a]"
+                >
+                  <Github size={18} />
+                  <span className="text-sm font-medium">GitHub</span>
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  href={project.link}
+                  className="w-12 h-12 border border-[#0a0a0a]/20 text-[#0a0a0a] rounded-xl flex items-center justify-center hover:bg-[#FFD700] hover:border-[#FFD700] transition-colors"
+                >
+                  <ExternalLink size={18} />
+                </motion.a>
+              </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
