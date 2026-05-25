@@ -2,20 +2,29 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
-import { ExternalLink, Github, Droplets, Terminal, ShieldCheck, Cpu } from "lucide-react";
+import { ExternalLink, Github, Droplets, Terminal, ShieldCheck, Cpu, Network, Monitor } from "lucide-react";
 
 const projects = [
   {
     id: "01",
-    title: "NIRAIVIZHI",
-    description: "AI-powered autonomous water monitoring system using ESP32 sensors (pH, turbidity, TDS, temperature) with ML-based anomaly detection and React Native authority dashboards.",
-    tags: ["React Native", "ESP32", "ML", "IoT"],
-    icon: Droplets,
-    github: "https://github.com/RaviBharathi410/NIRAIVIZHI-Hydrobot",
+    title: "Net-Sentinel",
+    description: "Architected a real-time AI-powered network monitoring platform using React.js, FastAPI, WebSockets, and AI/ML models, delivering sub-100ms anomaly detection and predictive analytics at scale.",
+    tags: ["React.js", "FastAPI", "WebSockets", "AI/ML"],
+    icon: Network,
+    github: "https://github.com/RaviBharathi410/Net-Sentinel",
     link: "#",
   },
   {
     id: "02",
+    title: "CollabBoard",
+    description: "Engineered a real-time collaborative whiteboard using React.js, Yjs (CRDT), WebSockets, and Konva.js, achieving conflict-free multiplayer synchronization and low-latency collaboration at scale.",
+    tags: ["React.js", "Yjs", "WebSockets", "GPT-4o"],
+    icon: Monitor,
+    github: "https://github.com/RaviBharathi410/CollabBoard",
+    link: "#",
+  },
+  {
+    id: "03",
     title: "CODE ARENA",
     description: "Real-time multiplayer coding arena with voice-to-code via Web Speech API, ELO ranking, AI matchmaking system, and OpenCV handwriting recognition for multi-input interaction.",
     tags: ["Node.js", "OpenCV", "ELO", "Real-Time"],
@@ -24,7 +33,7 @@ const projects = [
     link: "#",
   },
   {
-    id: "03",
+    id: "04",
     title: "SCRIBE",
     description: "AI-powered real-time transcription and smart note-generation system that converts speech into structured summaries using NLP. Supports voice input, keyword extraction, speaker identification, and auto-generated action items for easy access and collaboration.",
     tags: ["React", "Node.js", "NLP", "Real-Time"],
@@ -33,7 +42,7 @@ const projects = [
     link: "#",
   },
   {
-    id: "04",
+    id: "05",
     title: "DriveOS",
     description: "Real-time V2X system using YOLOv8 and sensor fusion to detect road hazards. Firebase data mesh with CarPlay React dashboard and AES-256 end-to-end encryption.",
     tags: ["YOLOv8", "Flutter", "Firebase", "AES-256"],
@@ -173,7 +182,7 @@ export default function Projects() {
               />
             </div>
             <motion.span style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-[#999] text-[12px] tracking-[0.1em]">
-              0{activeIndex + 1} / 04
+              0{activeIndex + 1} / 05
             </motion.span>
           </div>
         </div>

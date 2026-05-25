@@ -6,23 +6,23 @@ import { motion } from "framer-motion";
 const techCategories = [
   {
     category: "Frontend",
-    tags: ["React.js", "React Native", "Tailwind CSS"],
+    tags: ["React.js", "Next.js", "Tailwind CSS", "Vite", "Zustand"],
   },
   {
     category: "Backend",
-    tags: ["Node.js", "Express.js", "Flask", "REST APIs"],
+    tags: ["Node.js", "Express.js", "FastAPI", "WebSockets", "Microservices"],
   },
   {
     category: "AI/ML",
-    tags: ["YOLOv8", "OpenCV", "Computer Vision", "TensorFlow"],
+    tags: ["OpenCV", "YOLOv8", "GPT-4o Vision", "LLM Integration", "Three.js"],
   },
   {
-    category: "Databases",
-    tags: ["MongoDB", "PostgreSQL", "MySQL", "Firebase"],
+    category: "Databases & DevOps",
+    tags: ["PostgreSQL", "MongoDB", "Redis", "Docker", "CI/CD"],
   },
   {
     category: "Languages",
-    tags: ["Python", "JavaScript", "Java", "SQL"],
+    tags: ["TypeScript", "JavaScript", "Python", "Java", "SQL"],
   },
 ];
 
