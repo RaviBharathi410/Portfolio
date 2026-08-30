@@ -2,202 +2,136 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Code2, Server, Brain, Database, Terminal, CheckCircle2 } from "lucide-react";
 
 const techCategories = [
   {
-    category: "Frontend",
-    tags: ["React.js", "Next.js", "Tailwind CSS", "Vite", "Zustand"],
+    category: "Languages",
+    icon: Terminal,
+    tags: [
+      { name: "TypeScript", level: "Proficient" },
+      { name: "JavaScript (ES6+)", level: "Proficient" },
+      { name: "Python", level: "Proficient" },
+      { name: "Java (OOP)", level: "Proficient" },
+      { name: "SQL", level: "Proficient" },
+    ],
   },
   {
-    category: "Backend",
-    tags: ["Node.js", "Express.js", "FastAPI", "WebSockets", "Microservices"],
+    category: "Frontend & UI",
+    icon: Code2,
+    tags: [
+      { name: "React.js", level: "Proficient" },
+      { name: "Next.js", level: "Proficient" },
+      { name: "Tailwind CSS", level: "Proficient" },
+      { name: "Vite", level: "Proficient" },
+      { name: "Responsive Design", level: "Proficient" },
+    ],
   },
   {
-    category: "AI/ML",
-    tags: ["OpenCV", "YOLOv8", "GPT-4o Vision", "LLM Integration", "Three.js"],
+    category: "Backend & APIs",
+    icon: Server,
+    tags: [
+      { name: "Node.js", level: "Proficient" },
+      { name: "Express.js", level: "Proficient" },
+      { name: "FastAPI", level: "Proficient" },
+      { name: "RESTful APIs", level: "Proficient" },
+      { name: "WebSockets", level: "Proficient" },
+    ],
+  },
+  {
+    category: "AI/ML & CV",
+    icon: Brain,
+    tags: [
+      { name: "OpenCV", level: "Proficient" },
+      { name: "YOLOv8", level: "Proficient" },
+      { name: "GPT-4o Vision", level: "Proficient" },
+      { name: "LLM Integration", level: "Proficient" },
+      { name: "ELK.js", level: "Proficient" },
+    ],
   },
   {
     category: "Databases & DevOps",
-    tags: ["PostgreSQL", "MongoDB", "Redis", "Docker", "CI/CD"],
-  },
-  {
-    category: "Languages",
-    tags: ["TypeScript", "JavaScript", "Python", "Java", "SQL"],
+    icon: Database,
+    tags: [
+      { name: "PostgreSQL", level: "Proficient" },
+      { name: "MySQL", level: "Proficient" },
+      { name: "MongoDB", level: "Proficient" },
+      { name: "Redis", level: "Proficient" },
+      { name: "Git / Docker", level: "Proficient" },
+    ],
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.92 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 120, damping: 18 },
-  },
-};
-
-const wordVariant = {
-  hidden: { y: "110%", opacity: 0 },
-  show: {
-    y: "0%",
-    opacity: 1,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const headingWords = "Building with a Modern Tech Stack.".split(" ");
-
 export default function Skills() {
-  const [activeCardIndex, setActiveCardIndex] = useState<number | null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeCardIndex, setActiveCardIndex] = useState<number | null>(0);
 
   return (
-    <section id="skills" className="section-full bg-[#f5f5f5] text-[#0a0a0a] py-32">
+    <section id="skills" className="section-full bg-[#f5f5f5] text-[#0a0a0a] py-20 border-t border-[#e8e8e8]">
       <div className="section-inner px-6 flex flex-col items-start max-w-7xl mx-auto">
         <motion.div
           initial={{ x: -30, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="section-label mb-6 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="section-label mb-3 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
         >
-          — Core Tech
+          — Core Competencies
         </motion.div>
 
-        <motion.h2
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ staggerChildren: 0.06 }}
-          className="section-title text-4xl md:text-5xl font-display font-bold mb-12 text-[#0a0a0a] flex flex-wrap gap-x-3 gap-y-2"
-        >
-          {headingWords.map((word, idx) => (
-            <span key={idx} style={{ overflow: "hidden", display: "inline-block", paddingBottom: "4px" }}>
-              <motion.span style={{ display: "inline-block" }} variants={wordVariant}>
-                {word}
-              </motion.span>
-            </span>
-          ))}
-        </motion.h2>
+        <h2 className="section-title text-4xl md:text-5xl font-display font-bold mb-10 text-[#0a0a0a] scroll-mt-28">
+          Building with a <strong>Modern Tech Stack.</strong>
+        </h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="tech-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 w-full pt-8"
-        >
+        {/* Responsive Container: Mobile horizontal scroll-snap (<768px), Desktop Grid (≥768px) */}
+        <div className="flex md:grid md:grid-cols-5 gap-6 w-full overflow-x-auto md:overflow-visible snap-x snap-mandatory hide-scrollbar pb-6 md:pb-0">
           {techCategories.map((item, idx) => {
             const isActive = activeCardIndex === idx;
-            const isHovered = hoveredIndex === idx;
-            const shouldDim = hoveredIndex !== null && !isHovered && !isActive;
+            const Icon = item.icon;
 
             return (
               <motion.div
                 key={idx}
-                variants={itemVariants}
-                style={{ willChange: "transform" }}
-                className="h-full"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                onClick={() => setActiveCardIndex(idx)}
+                className={`shrink-0 md:shrink snap-start w-[85vw] max-w-[320px] md:w-auto p-6 rounded-2xl flex flex-col justify-between transition-all cursor-pointer border ${
+                  isActive
+                    ? "bg-[#0a0a0a] text-white border-[#FFD700] shadow-xl"
+                    : "bg-[#ffffff] text-[#0a0a0a] border-[#e0e0e0] hover:border-[#FFD700]"
+                }`}
               >
-                <motion.div
-                  onClick={() => setActiveCardIndex(idx)}
-                  onHoverStart={() => setHoveredIndex(idx)}
-                  onHoverEnd={() => setHoveredIndex(null)}
-                  animate={{
-                    y: isActive ? -12 : 0,
-                    scale: isActive ? 1.04 : (shouldDim ? 0.97 : 1),
-                    opacity: shouldDim ? 0.55 : 1,
-                    backgroundColor: isActive ? "#0a0a0a" : (idx === 0 ? "#0a0a0a" : "#e8e8e8"),
-                    borderColor: isActive ? "#FFD700" : "transparent",
-                    borderWidth: "1.5px",
-                    borderStyle: "solid",
-                    boxShadow: "none",
-                  }}
-                  transition={
-                    isActive
-                      ? { type: "spring", stiffness: 200, damping: 18 }
-                      : { type: "spring", stiffness: 300, damping: 22 }
-                  }
-                  whileHover={
-                    !isActive
-                      ? {
-                          y: -8,
-                          scale: 1.02,
-                          backgroundColor: idx === 0 ? "#1a1a1a" : "#ffffff",
-                          borderColor: "#FFD700",
-                          boxShadow: "0 20px 50px rgba(0,0,0,0.1)",
-                          transition: { type: "spring", stiffness: 300, damping: 22 },
-                        }
-                      : undefined
-                  }
-                  style={{ willChange: "transform" }}
-                  className="relative overflow-hidden h-full p-6 rounded-2xl flex flex-col items-center text-center shadow-sm cursor-pointer"
-                >
-                  {/* Shimmer on active card */}
-                  {isActive && (
-                    <motion.div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        borderRadius: "inherit",
-                        background: "linear-gradient(135deg, rgba(255,215,0,0.07) 0%, transparent 60%)",
-                        pointerEvents: "none",
-                      }}
-                      animate={{ opacity: [0.5, 1, 0.5] }}
-                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                  )}
-
-                  <div className="flex flex-row items-center justify-start gap-3 mb-6 w-full relative z-10">
-                    <motion.div
-                      className="w-2 h-2 rounded-full bg-[#FFD700]"
-                      whileHover={{ scale: 1.5, transition: { type: "spring", stiffness: 400 } }}
-                      animate={
-                        isActive
-                          ? { scale: [1, 1.4, 1] }
-                          : { scale: 1 }
-                      }
-                      transition={
-                        isActive
-                          ? { duration: 2, repeat: Infinity, ease: "easeInOut" }
-                          : {}
-                      }
-                    ></motion.div>
-                    <h3
-                      className={`text-sm uppercase font-bold tracking-wider ${isActive || idx === 0 ? "text-[#ffffff]" : "text-[#0a0a0a]"}`}
-                    >
-                      {item.category}
-                    </h3>
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className={`p-3 rounded-xl ${isActive ? "bg-white/10 text-[#FFD700]" : "bg-[#f5f5f5] text-[#0a0a0a]"}`}>
+                      <Icon size={24} />
+                    </div>
+                    {isActive && <span className="text-[#FFD700] text-xs">✦ Active</span>}
                   </div>
-                  <div className="flex flex-col gap-2 text-sm leading-relaxed w-full items-center relative z-10">
+
+                  <h3 className="text-lg font-bold mb-6 font-display uppercase tracking-wider">{item.category}</h3>
+
+                  <div className="flex flex-col gap-3">
                     {item.tags.map((tag, i) => (
-                      <span
+                      <div
                         key={i}
-                        className={`block w-full border-b pb-2 last:border-0 last:pb-0 font-medium ${
-                          isActive || idx === 0
-                            ? "text-[#aaaaaa] border-[#333333]"
-                            : "text-[#3a3a3a] border-[#d1d1d1]/50"
+                        className={`flex items-center justify-between pb-2 border-b text-xs font-medium ${
+                          isActive ? "border-white/10 text-white/90" : "border-[#f0f0f0] text-[#3a3a3a]"
                         }`}
                       >
-                        {tag}
-                      </span>
+                        <span className="flex items-center gap-1.5">
+                          <CheckCircle2 size={12} className={isActive ? "text-[#FFD700]" : "text-[#999999]"} />
+                          {tag.name}
+                        </span>
+                      </div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

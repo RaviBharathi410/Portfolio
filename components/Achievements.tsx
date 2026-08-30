@@ -1,101 +1,90 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
 
 const achievements = [
   {
     title: "Winner — SaaSathoN'26",
-    event: "36-hour SaaS Hackathon",
+    prize: "Rs. 40,000 First Prize",
+    event: "36-hour National SaaS Hackathon",
     venue: "SSN College of Engineering",
+    built: "Scribe AI: Engineered 5+ AI-powered SaaS microservices with real-time speech-to-text NLP note generation, cutting latency by 40% and generating $100+ MVP revenue.",
+    featured: true,
   },
   {
     title: "Winner — E-Horyzon 2026",
-    event: "Idea Pitching Competition",
+    prize: "1st Place Pitching",
+    event: "National Idea Pitching Competition",
     venue: "Kongu Engineering College",
+    built: "Autonomous trace & telemetry intelligence concept with predictive node error analysis.",
+    featured: false,
   },
   {
     title: "Winner — AURISTRA'26",
-    event: "48-hour Hackathon",
+    prize: "1st Place Hackathon",
+    event: "48-hour National Hackathon",
     venue: "Takshashila University",
+    built: "CODE ARENA: Real-time multiplayer competitive coding platform with voice-assisted coding and OpenCV gesture interaction.",
+    featured: false,
   },
 ];
 
-const cardVariants = {
-  hidden: { y: 50, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 20,
-    },
-  },
-};
-
 export default function Achievements() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
-  const smoothY = useSpring(y, { stiffness: 80, damping: 20 });
-
   return (
-    <section ref={sectionRef} id="recognition" className="section-full bg-[#f5f5f5] text-[#0a0a0a] py-32 relative overflow-hidden">
-      
-      {/* Parallax Background Text */}
-      <motion.div
-        style={{ y: smoothY, willChange: "transform" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] md:text-[20rem] font-bold text-[#f0f0f0] pointer-events-none z-0 select-none whitespace-nowrap"
-      >
-        WINS
-      </motion.div>
-
+    <section id="achievements" className="section-full bg-[#e8e8e8] text-[#0a0a0a] py-20 relative overflow-hidden">
       <div className="section-inner px-6 max-w-7xl mx-auto flex flex-col items-start relative z-10">
         <motion.div
           initial={{ x: -30, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="section-label mb-16 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+          className="section-label mb-3 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
         >
-          — Recognition
+          — National Recognition
         </motion.div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ staggerChildren: 0.15 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"
-        >
+        <h2 className="section-title text-4xl md:text-5xl font-display font-bold mb-10 text-[#0a0a0a] scroll-mt-28">
+          3× Hackathon <strong>Victories.</strong>
+        </h2>
+
+        {/* Responsive Container: Mobile horizontal scroll-snap (<768px), Desktop Grid (≥768px) */}
+        <div className="flex md:grid md:grid-cols-3 gap-8 w-full overflow-x-auto md:overflow-visible snap-x snap-mandatory hide-scrollbar pb-6 md:pb-0">
           {achievements.map((item, idx) => (
             <motion.div
               key={idx}
-              variants={cardVariants}
-              whileHover={{
-                y: -6,
-                scale: 1.02,
-                borderColor: "#FFD700",
-                transition: { type: "spring", stiffness: 300, damping: 20 },
-              }}
-              className="bg-[#ffffff] rounded-2xl p-8 border border-[#e0e0e0] flex flex-col items-center text-center shadow-sm"
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              whileHover={{ y: -6 }}
+              className={`shrink-0 md:shrink snap-start w-[85vw] max-w-[340px] md:w-auto rounded-2xl p-8 flex flex-col justify-between border shadow-sm ${
+                item.featured
+                  ? "bg-[#0a0a0a] text-white border-[#FFD700]"
+                  : "bg-[#ffffff] text-[#0a0a0a] border-[#d1d1d1]"
+              }`}
             >
-              <div className="mb-6 p-4 rounded-full bg-[#f5f5f5] text-[#0a0a0a]">
-                <Trophy size={32} strokeWidth={1.5} />
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div className={`p-4 rounded-full ${item.featured ? "bg-[#FFD700] text-[#0a0a0a]" : "bg-[#f5f5f5] text-[#0a0a0a]"}`}>
+                    <Trophy size={28} strokeWidth={1.5} />
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-widest px-3 py-1 bg-[#FFD700]/20 text-[#FFD700] rounded-full border border-[#FFD700]/30">
+                    {item.prize}
+                  </span>
+                </div>
+
+                <h3 className={`text-xl font-bold mb-2 ${item.featured ? "text-white" : "text-[#0a0a0a]"}`}>{item.title}</h3>
+                <p className="font-semibold text-xs uppercase tracking-wider text-[#FFD700] mb-1">{item.event}</p>
+                <p className={`text-xs mb-6 ${item.featured ? "text-white/60" : "text-[#666666]"}`}>{item.venue}</p>
+
+                <p className={`text-sm leading-relaxed font-light ${item.featured ? "text-white/80" : "text-[#3a3a3a]"}`}>
+                  {item.built}
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-[#0a0a0a] mb-2">{item.title}</h3>
-              <p className="font-bold text-[#FFD700] text-sm uppercase tracking-wide mb-3">{item.event}</p>
-              <p className="text-[#666666] text-sm">{item.venue}</p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

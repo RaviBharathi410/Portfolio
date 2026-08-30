@@ -1,300 +1,319 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
-import { ExternalLink, Github, Droplets, Terminal, ShieldCheck, Cpu, Network, Monitor } from "lucide-react";
+import { motion } from "framer-motion";
+import { ExternalLink, Github, Network, Monitor, Terminal, ShieldCheck, Cpu } from "lucide-react";
 
 const projects = [
   {
     id: "01",
-    title: "Net-Sentinel",
-    description: "Architected a real-time AI-powered network monitoring platform using React.js, FastAPI, WebSockets, and AI/ML models, delivering sub-100ms anomaly detection and predictive analytics at scale.",
-    tags: ["React.js", "FastAPI", "WebSockets", "AI/ML"],
-    icon: Network,
-    github: "https://github.com/RaviBharathi410/Net-Sentinel",
+    title: "SCRIBE AI",
+    subtitle: "AI Speech-to-Text & Automated Note Synthesizer",
+    description: "Engineered 5+ end-to-end SaaS microservices converting speech into structured NLP summaries, speaker recognition, and instant action items under 36-hour hackathon conditions.",
+    impact: "SaaSathoN'26 National 1st Prize Winner · $100+ MVP Revenue",
+    image: "/scribe.png",
+    tags: ["React.js", "TypeScript", "FastAPI", "WebSockets", "NLP"],
+    icon: ShieldCheck,
+    github: "https://www.usescribe.in/",
     link: "#",
   },
   {
     id: "02",
-    title: "CollabBoard",
-    description: "Engineered a real-time collaborative whiteboard using React.js, Yjs (CRDT), WebSockets, and Konva.js, achieving conflict-free multiplayer synchronization and low-latency collaboration at scale.",
-    tags: ["React.js", "Yjs", "WebSockets", "GPT-4o"],
-    icon: Monitor,
-    github: "https://github.com/RaviBharathi410/CollabBoard",
+    title: "Distributed-Trace",
+    subtitle: "Autonomous AI Ops & Network Trace Monitoring Platform",
+    description: "Architected a real-time AI-powered network monitoring platform using React.js, FastAPI, WebSockets, and AI/ML models. Delivers sub-100ms anomaly detection across 10+ simulated network nodes with topology visualization.",
+    impact: "Sub-100ms Anomaly Detection · 35% MTTR Reduction",
+    image: "/distributed-trace.png",
+    tags: ["React.js", "FastAPI", "WebSockets", "AI/ML", "Python"],
+    icon: Network,
+    github: "https://github.com/RaviBharathi410/Distributed-Trace",
     link: "#",
   },
+
   {
     id: "03",
     title: "CODE ARENA",
-    description: "Real-time multiplayer coding arena with voice-to-code via Web Speech API, ELO ranking, AI matchmaking system, and OpenCV handwriting recognition for multi-input interaction.",
-    tags: ["Node.js", "OpenCV", "ELO", "Real-Time"],
+    subtitle: "Real-Time AI Coding Battles & Matchmaking Platform",
+    description: "Built a horizontally scalable coding battle platform using React.js, Node.js, TypeScript, Socket.IO, and PostgreSQL. Features real-time ELO matchmaking, voice-assisted coding, and live leaderboards.",
+    impact: "50+ Concurrent Sessions · +30% Retention Boost",
+    image: "/code-arena.png",
+    tags: ["React.js", "Node.js", "TypeScript", "Socket.IO", "PostgreSQL"],
     icon: Terminal,
     github: "https://github.com/RaviBharathi410/Code-Arena",
     link: "#",
   },
   {
     id: "04",
-    title: "SCRIBE",
-    description: "AI-powered real-time transcription and smart note-generation system that converts speech into structured summaries using NLP. Supports voice input, keyword extraction, speaker identification, and auto-generated action items for easy access and collaboration.",
-    tags: ["React", "Node.js", "NLP", "Real-Time"],
-    icon: ShieldCheck,
-    github: "https://www.usescribe.in/",
+    title: "CollabBoard",
+    subtitle: "AI-Powered Real-Time Collaborative Whiteboard",
+    description: "Developed a real-time collaborative whiteboard using React.js, Yjs (CRDT), WebSockets, and Konva.js, supporting 20+ concurrent users with conflict-free synchronization and automated sketch-to-diagram flowcharts via GPT-4o Vision.",
+    impact: "<50ms Latency · 70% Faster Diagramming Workflows",
+    image: "/collabboard.png",
+    tags: ["React.js", "Yjs (CRDT)", "WebSockets", "GPT-4o Vision", "Konva.js"],
+    icon: Monitor,
+    github: "https://github.com/RaviBharathi410/CollabBoard",
     link: "#",
   },
+
   {
     id: "05",
     title: "DriveOS",
-    description: "Real-time V2X system using YOLOv8 and sensor fusion to detect road hazards. Firebase data mesh with CarPlay React dashboard and AES-256 end-to-end encryption.",
-    tags: ["YOLOv8", "Flutter", "Firebase", "AES-256"],
+    subtitle: "Real-Time V2X Telematics & Driver Assistance Mesh",
+    description: "Real-time V2X system using YOLOv8 computer vision and sensor fusion to detect road hazards with a CarPlay dashboard mesh and AES-256 end-to-end telemetry encryption.",
+    impact: "Sub - 50ms Road Hazard Detection & AES - 256 Mesh",
+    image: "/driveOs.jpg",
+    tags: ["YOLOv8", "Flutter", "Firebase", "AES-256", "Computer Vision"],
     icon: Cpu,
     github: "https://github.com/RaviBharathi410/Drive-OS",
     link: "#",
   },
 ];
 
-const headingWords = "Things I've Built.".split(" ");
-
-const wordVariant = {
-  hidden: { y: "110%", opacity: 0 },
-  show: {
-    y: "0%",
-    opacity: 1,
-    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] }
-  }
-};
-
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [showRightFade, setShowRightFade] = useState(true);
   const [showHint, setShowHint] = useState(true);
 
-  const { scrollXProgress } = useScroll({
-    container: scrollRef,
-  });
-
-  useMotionValueEvent(scrollXProgress, "change", (latest) => {
-    setActiveIndex(Math.round(latest * (projects.length - 1)));
-    if (latest > 0.05 && showHint) {
-      setShowHint(false);
-    } else if (latest <= 0.05 && !showHint) {
-      setShowHint(true);
-    }
-  });
-
-  // Translate vertical scroll to horizontal scroll when hovering over the track
-  useEffect(() => {
+  // Handle scroll position detection for pagination & gradient fade
+  const handleScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
 
-    let targetScroll = el.scrollLeft;
-    let currentScroll = el.scrollLeft;
-    let isScrolling = false;
-    let animationFrameId: number;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll > 0) {
+      const scrollPercentage = el.scrollLeft / maxScroll;
+      const index = Math.round(scrollPercentage * (projects.length - 1));
+      setActiveIndex(Math.min(projects.length - 1, Math.max(0, index)));
+      setShowRightFade(el.scrollLeft < maxScroll - 20);
+    }
 
-    const smoothScroll = () => {
-      // Linear interpolation (lerp) for buttery smooth movement
-      currentScroll += (targetScroll - currentScroll) * 0.08; 
-      el.scrollLeft = currentScroll;
-      
-      // Continue animation if we haven't reached the target
-      if (Math.abs(targetScroll - currentScroll) > 0.5) {
-        animationFrameId = requestAnimationFrame(smoothScroll);
-      } else {
-        isScrolling = false;
-        el.scrollLeft = targetScroll; // Snap to exact target at the end
-      }
-    };
+    if (el.scrollLeft > 30 && showHint) {
+      setShowHint(false);
+    }
+  };
+
+  // Section-scoped wheel event listener with escape hatch
+  useEffect(() => {
+    const sectionEl = sectionRef.current;
+    const el = scrollRef.current;
+    if (!sectionEl || !el) return;
 
     const handleWheel = (e: WheelEvent) => {
-      // Allow native horizontal swipe gestures (trackpads)
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-      
-      const isAtStart = targetScroll <= 0;
-      const isAtEnd = targetScroll >= el.scrollWidth - el.clientWidth;
+      // Determine primary scroll direction
+      const isHorizontalGesture = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      const delta = isHorizontalGesture ? e.deltaX : e.deltaY;
 
-      // Allow page to scroll vertically if we are at the boundaries
-      if (isAtStart && e.deltaY < 0) return;
-      if (isAtEnd && e.deltaY > 0) return;
+      if (delta === 0) return;
 
-      e.preventDefault();
-      
-      // Update target scroll with a slight speed multiplier for better UX
-      targetScroll += e.deltaY * 1.5; 
-      
-      // Clamp the target to prevent overshooting
-      targetScroll = Math.max(0, Math.min(targetScroll, el.scrollWidth - el.clientWidth));
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      const currentPos = el.scrollLeft;
+      const isAtStart = currentPos <= 5;
+      const isAtEnd = currentPos >= maxScroll - 5;
 
-      // Start the animation loop if it's not already running
-      if (!isScrolling) {
-        isScrolling = true;
-        currentScroll = el.scrollLeft;
-        animationFrameId = requestAnimationFrame(smoothScroll);
+      // Escape hatch: if at the start and scrolling UP, or at the end and scrolling DOWN, let normal page scroll handle it
+      if ((isAtStart && delta < 0) || (isAtEnd && delta > 0)) {
+        return;
       }
+
+      // Intercept wheel scroll to scroll horizontal projects container
+      e.preventDefault();
+      el.scrollLeft += delta * 1.5;
     };
 
-    el.addEventListener("wheel", handleWheel, { passive: false });
-    
-    return () => {
-      el.removeEventListener("wheel", handleWheel);
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-    };
+    // Attach wheel event directly to section element
+    sectionEl.addEventListener("wheel", handleWheel, { passive: false });
+    return () => sectionEl.removeEventListener("wheel", handleWheel);
   }, []);
 
+  // Mouse Drag to Scroll Logic
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setIsMouseDown(true);
+    setStartX(e.pageX - el.offsetLeft);
+    setScrollLeft(el.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMouseDown(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startX) * 1.8;
+    el.scrollLeft = scrollLeft - walk;
+  };
+
+  const scrollToCard = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = 480;
+    el.scrollTo({ left: index * cardWidth, behavior: "smooth" });
+  };
+
   return (
-    <section ref={sectionRef} id="projects" className="bg-[#ffffff] text-[#0a0a0a] py-32">
+    <section ref={sectionRef} id="projects" className="bg-[#ffffff] text-[#0a0a0a] py-20 border-t border-[#f0f0f0]">
       <div className="flex flex-col justify-center">
-        
+
         {/* Header Content */}
-        <div className="px-6 max-w-7xl mx-auto w-full flex flex-col items-start">
-          <motion.div
-            initial={{ x: -30, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="section-label mb-6 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
-          >
-            — Featured Work
-          </motion.div>
+        <div className="px-6 md:px-12 max-w-7xl mx-auto w-full flex flex-col md:flex-row md:items-end justify-between mb-8">
+          <div>
+            <motion.div
+              initial={{ x: -30, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="section-label mb-3 text-[#0a0a0a] border-[#0a0a0a] uppercase tracking-widest text-xs font-bold"
+            >
+              — Featured Work
+            </motion.div>
 
-          <motion.h2
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            transition={{ staggerChildren: 0.08 }}
-            className="section-title text-4xl md:text-5xl font-display font-bold mb-8 flex flex-wrap gap-x-3 gap-y-2 text-[#0a0a0a]"
-          >
-            {headingWords.map((word, idx) => (
-              <span key={idx} className="overflow-hidden inline-block pb-1">
-                <motion.span className="inline-block" variants={wordVariant}>
-                  {word}
-                </motion.span>
-              </span>
-            ))}
-          </motion.h2>
-
-          {/* Progress Indicator */}
-          <div className="flex items-center gap-6 mb-16">
-            <div className="w-[120px] h-[2px] bg-[#0a0a0a]/10 rounded-[2px] relative overflow-hidden">
-              <motion.div 
-                style={{ scaleX: scrollXProgress, transformOrigin: "left" }} 
-                className="absolute inset-0 bg-[#FFD700] rounded-[2px]" 
-              />
-            </div>
-            <motion.span style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-[#999] text-[12px] tracking-[0.1em]">
-              0{activeIndex + 1} / 05
-            </motion.span>
+            <h2 className="section-title text-4xl md:text-5xl font-display font-bold text-[#0a0a0a] scroll-mt-28">
+              Things I've <strong>Built.</strong>
+            </h2>
           </div>
+
+          {/* Swipe / Drag Hint */}
+          {showHint && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="hidden sm:flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#666666] bg-[#f5f5f5] px-4 py-2 rounded-full border border-[#e0e0e0] mt-4 md:mt-0"
+            >
+              <span>Scroll or drag to explore</span>
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                →
+              </motion.span>
+            </motion.div>
+          )}
         </div>
 
-        {/* Horizontal Scroll Track */}
-        <div className="w-full relative">
-          <div 
-            ref={scrollRef}
-            className="relative flex gap-7 overflow-x-auto px-6 pb-12 pt-4 hide-scrollbar"
-            style={{ 
-              scrollbarWidth: "none", 
-              msOverflowStyle: "none",
-              // To align the first card with the text above, we calculate padding
-              // Tailwind's max-w-7xl is 1280px.
-            }}
-          >
-            {/* Spacer to push the first item to align with the max-w-7xl container */}
-            <div className="shrink-0 w-0 md:w-[calc(50vw-40rem)]" />
+        {/* Horizontal Scroll Track Container */}
+        <div className="w-full relative group px-6 md:px-12">
 
-            {projects.map((project) => (
+          {/* Scroll Right Fade Mask Gradient */}
+          <div
+            className={`absolute top-0 bottom-0 right-12 w-24 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none transition-opacity duration-300 ${showRightFade ? "opacity-100" : "opacity-0"
+              }`}
+          />
+
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            tabIndex={0}
+            aria-label="Projects horizontal scroll container. Use arrow keys, mouse wheel, or drag to scroll."
+            className={`relative flex gap-6 overflow-x-auto pb-8 pt-2 hide-scrollbar focus:outline-none focus:ring-2 focus:ring-[#FFD700] ${isMouseDown ? "cursor-grabbing select-none" : "cursor-grab"
+              }`}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {projects.map((project, idx) => (
               <motion.div
                 key={project.id}
-                initial="inactive"
-                whileInView="active"
-                viewport={{ amount: 0.6, root: scrollRef }}
-                variants={{
-                  active: { scale: 1, opacity: 1 },
-                  inactive: { scale: 0.96, opacity: 0.75 }
-                }}
-                transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                whileHover={{
-                  y: -6,
-                  boxShadow: "0 24px 60px rgba(0,0,0,0.12)",
-                  transition: { type: "spring", stiffness: 300, damping: 22 }
-                }}
-                className="shrink-0 bg-[#f5f5f5] rounded-[24px] p-8 md:p-10 flex flex-col justify-between border border-[#e8e8e8]"
-                style={{ width: "480px", minWidth: "480px", minHeight: "440px", height: "auto" }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                className="shrink-0 bg-[#f5f5f5] rounded-3xl overflow-hidden flex flex-col justify-between border border-[#e8e8e8] shadow-sm hover:shadow-lg transition-all duration-300"
+                style={{ width: "460px", maxWidth: "85vw" }}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-8">
-                    <span className="text-[#0a0a0a] p-3 rounded-full bg-[#e8e8e8]">
-                      <project.icon size={32} strokeWidth={1.5} />
-                    </span>
-                    <span className="text-xs font-bold tracking-[0.2em] text-[#FFD700] uppercase">
-                      Project {project.id}
-                    </span>
+                {/* Visual Project Screenshot Preview */}
+                <div className="relative h-52 w-full bg-[#0a0a0a] overflow-hidden group">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80" />
+
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-[#0a0a0a]/80 backdrop-blur-md rounded-full text-[10px] font-bold tracking-widest text-[#FFD700] uppercase border border-[#FFD700]/30">
+                    Project {project.id}
                   </div>
 
-                  <h3 className="text-2xl font-bold mb-4 text-[#0a0a0a]">{project.title}</h3>
-                  <p className="text-[#3a3a3a] leading-relaxed font-light mb-8">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {project.tags.map((tag) => (
-                      <motion.span
-                        key={tag}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.2 }}
-                        className="text-[11px] px-3 py-1 uppercase tracking-wider font-semibold border border-[#0a0a0a]/20 rounded-full text-[#0a0a0a] cursor-default transition-colors hover:border-[#FFD700]"
-                      >
-                        {tag}
-                      </motion.span>
-                    ))}
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <span className="text-xs font-semibold text-white/90 bg-[#FFD700]/20 px-3 py-1 rounded-md border border-[#FFD700]/40 backdrop-blur-sm">
+                      {project.impact}
+                    </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <motion.a
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    href={project.github}
-                    className="flex-1 bg-[#0a0a0a] text-[#ffffff] py-3 rounded-xl flex items-center justify-center gap-2 transition-colors hover:bg-[#1a1a1a]"
-                  >
-                    <Github size={18} />
-                    <span className="text-sm font-medium">GitHub</span>
-                  </motion.a>
-                  <motion.a
-                    whileHover={{ scale: 1.08 }}
-                    whileTap={{ scale: 0.95 }}
-                    href={project.link}
-                    className="w-12 h-12 border border-[#0a0a0a]/20 text-[#0a0a0a] rounded-xl flex items-center justify-center transition-colors hover:text-[#FFD700] hover:border-[#FFD700]"
-                  >
-                    <ExternalLink size={18} />
-                  </motion.a>
+                {/* Card Content */}
+                <div className="p-7 flex flex-col flex-1 justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-1 text-[#0a0a0a]">{project.title}</h3>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[#FFD700] mb-3">{project.subtitle}</p>
+                    <p className="text-[#3a3a3a] text-sm leading-relaxed font-light mb-6">
+                      {project.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[11px] px-3 py-1 uppercase tracking-wider font-semibold border border-[#0a0a0a]/15 bg-white rounded-full text-[#0a0a0a]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-[#e0e0e0]">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-[#0a0a0a] text-[#ffffff] py-3 rounded-xl flex items-center justify-center gap-2 transition-colors hover:bg-[#222]"
+                    >
+                      <Github size={16} />
+                      <span className="text-sm font-medium">GitHub Repository</span>
+                    </a>
+                    <a
+                      href={project.link}
+                      className="w-11 h-11 border border-[#0a0a0a]/20 text-[#0a0a0a] rounded-xl flex items-center justify-center transition-colors hover:bg-[#FFD700] hover:border-[#FFD700]"
+                      aria-label="View live demo"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  </div>
                 </div>
               </motion.div>
             ))}
-
-            {/* Spacer to allow the last item to be centered/scrolled past */}
-            <div className="shrink-0 w-6 md:w-[calc(50vw-40rem)]" />
           </div>
         </div>
 
-        {/* Scroll Hint */}
-        <motion.div
-          initial={{ opacity: 1 }}
-          animate={{ opacity: showHint ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="absolute bottom-16 right-8 flex items-center gap-2 pointer-events-none"
-        >
-          <span style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-[11px] tracking-[0.15em] text-[#999] uppercase">
-            Drag or Scroll
-          </span>
-          <motion.span
-            animate={{ x: [0, 8, 0] }}
-            transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-[#999] text-[12px]"
-          >
-            →
-          </motion.span>
-        </motion.div>
+        {/* Interactive Dot Pagination */}
+        <div className="flex justify-center items-center gap-2 mt-4">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToCard(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${activeIndex === i ? "w-8 bg-[#FFD700]" : "w-2 bg-[#0a0a0a]/20 hover:bg-[#0a0a0a]/40"
+                }`}
+              aria-label={`Scroll to project ${i + 1}`}
+            />
+          ))}
+        </div>
 
       </div>
     </section>

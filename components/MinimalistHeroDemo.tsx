@@ -5,6 +5,7 @@ const MinimalistHeroDemo = () => {
   const navLinks = [
     { label: 'HOME', href: '#home' },
     { label: 'ABOUT', href: '#about' },
+    { label: 'EXPERIENCE', href: '#experience' },
     { label: 'TECH', href: '#skills' },
     { label: 'PROJECTS', href: '#projects' },
     { label: 'RECOGNITION', href: '#achievements' },

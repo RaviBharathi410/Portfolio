@@ -11,7 +11,7 @@ const educationData = [
     degree: "B.E. in Computer Science",
     institution: "PSNA College of Engineering and Technology, Dindigul",
     period: "2023 - 2027",
-    details: "Current CGPA: 7.86",
+    details: "Current CGPA: 7.7",
     icon: "🎓",
   },
   {
@@ -54,8 +54,8 @@ export default function Education() {
 
         <div className="flex flex-col gap-6">
           {educationData.map((edu, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="edu-row glass p-6 md:p-8 rounded-2xl border border-[var(--border-light)] flex items-start gap-6 hover:bg-white/5 transition-all group"
             >
               <div className="text-4xl grayscale group-hover:grayscale-0 transition-all duration-500 mt-1">

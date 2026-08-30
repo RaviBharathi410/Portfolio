@@ -116,12 +116,24 @@
   }
 
   /* Section Wrappers */
+  .section-full {
+    position: relative;
+    z-index: 1;
+    scroll-margin-top: 80px;
+  }
+
   .section {
     position: relative;
     z-index: 1;
-    padding: 6rem 1.5rem;
+    padding: clamp(3rem, 6vw, 5rem) 1.5rem;
     max-width: 1400px;
     margin: 0 auto;
+    scroll-margin-top: 80px;
+  }
+
+  /* Global Section Scroll-Margin Anchor Fix for Sticky Navbar */
+  section {
+    scroll-margin-top: 80px;
   }
 
   .section-label {
@@ -132,7 +144,7 @@
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .section-label::before {
@@ -144,12 +156,13 @@
   }
 
   .section-title {
-    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-size: clamp(2.2rem, 5vw, 4rem);
     font-weight: 900;
     letter-spacing: -0.05em;
     color: hsl(var(--foreground));
-    line-height: 0.9;
+    line-height: 1;
     margin-bottom: 1.5rem;
+    scroll-margin-top: 90px;
   }
 }
 
