@@ -94,7 +94,7 @@ export default function Navbar({ navLinks }: NavbarProps) {
             })}
 
             <a
-              href="/Ravibharathi V - Resume.pdf"
+              href="/Ravibharathi-V-Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="ml-4 px-4 py-2 rounded-full bg-[#FFD700] text-[#0a0a0a] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe033] transition-transform active:scale-95 shadow-md"
@@ -147,7 +147,7 @@ export default function Navbar({ navLinks }: NavbarProps) {
 
             <div className="flex flex-col gap-4 pt-6 border-t border-white/10">
               <a
-                href="/Ravibharathi V - Resume.pdf"
+                href="/Ravibharathi-V-Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-4 rounded-xl bg-[#FFD700] text-[#0a0a0a] text-center font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg"

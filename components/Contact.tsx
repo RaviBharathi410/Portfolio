@@ -86,7 +86,7 @@ export default function Contact() {
             {/* Social & Resume Download Buttons */}
             <div className="flex flex-col gap-3 pt-2">
               <a
-                href="/Ravibharathi V - Resume.pdf"
+                href="/Ravibharathi-V-Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-4 rounded-xl bg-[#FFD700] text-[#0a0a0a] font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 shadow-md hover:bg-[#ffe033] transition-colors"
