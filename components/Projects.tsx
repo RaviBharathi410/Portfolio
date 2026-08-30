@@ -14,8 +14,8 @@ const projects = [
     image: "/scribe.png",
     tags: ["React.js", "TypeScript", "FastAPI", "WebSockets", "NLP"],
     icon: ShieldCheck,
-    github: "https://www.usescribe.in/",
-    link: "#",
+    github: "https://github.com/RaviBharathi410/",
+    link: "https://www.usescribe.in/",
   },
   {
     id: "02",
@@ -27,7 +27,7 @@ const projects = [
     tags: ["React.js", "FastAPI", "WebSockets", "AI/ML", "Python"],
     icon: Network,
     github: "https://github.com/RaviBharathi410/Distributed-Trace",
-    link: "#",
+    link: "https://distributed-trace.vercel.app/",
   },
   {
     id: "03",
@@ -39,7 +39,7 @@ const projects = [
     tags: ["React.js", "Node.js", "TypeScript", "Socket.IO", "PostgreSQL"],
     icon: Terminal,
     github: "https://github.com/RaviBharathi410/Code-Arena",
-    link: "#",
+    link: "https://code-arena-web-nine.vercel.app/login",
   },
   {
     id: "04",
@@ -51,7 +51,7 @@ const projects = [
     tags: ["React.js", "Yjs (CRDT)", "WebSockets", "GPT-4o Vision", "Konva.js"],
     icon: Monitor,
     github: "https://github.com/RaviBharathi410/CollabBoard",
-    link: "#",
+    link: "https://collab-board-two-delta.vercel.app/",
   },
   {
     id: "05",
@@ -251,7 +251,8 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="shrink-0 bg-[#f5f5f5] rounded-3xl overflow-hidden flex flex-col justify-between border border-[#e8e8e8] shadow-sm hover:shadow-lg transition-all duration-300"
+                onClick={() => project.link !== "#" && window.open(project.link, "_blank", "noopener,noreferrer")}
+                className={`shrink-0 bg-[#f5f5f5] rounded-3xl overflow-hidden flex flex-col justify-between border border-[#e8e8e8] shadow-sm hover:shadow-lg transition-all duration-300 ${project.link !== "#" ? "cursor-pointer" : ""}`}
                 style={{ width: "460px", maxWidth: "85vw" }}
               >
                 {/* Screenshot */}
@@ -292,6 +293,7 @@ export default function Projects() {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
                       className="flex-1 bg-[#0a0a0a] text-white py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#222] transition-colors"
                     >
                       <Github size={16} />
@@ -299,7 +301,10 @@ export default function Projects() {
                     </a>
                     <a
                       href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       aria-label="View live demo"
+                      onClick={(e) => e.stopPropagation()}
                       className="w-11 h-11 border border-[#0a0a0a]/20 text-[#0a0a0a] rounded-xl flex items-center justify-center hover:bg-[#FFD700] hover:border-[#FFD700] transition-colors"
                     >
                       <ExternalLink size={16} />

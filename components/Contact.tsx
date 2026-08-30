@@ -17,7 +17,7 @@ export default function Contact() {
   return (
     <section id="contact" className="section-full bg-[#ffffff] text-[#0a0a0a] py-20 border-t border-[#f0f0f0]">
       <div className="section-inner px-6 max-w-5xl mx-auto flex flex-col items-center">
-        
+
         {/* Availability Badge */}
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
@@ -47,7 +47,7 @@ export default function Contact() {
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full items-start">
-          
+
           {/* Left Column: Direct Links & Phone Protection */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             <a
